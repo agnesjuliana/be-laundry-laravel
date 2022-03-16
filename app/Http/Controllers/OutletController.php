@@ -20,7 +20,7 @@ class OutletController extends Controller
     {
         try {
 
-            $result = Outlet::get();
+            $result = Outlet::with(['user'])->get();
 
             return response([
                 "message" => "success get outlet",

@@ -20,7 +20,7 @@ class TransaksiController extends Controller
     {
         try {
 
-            $result = Transaksi::get();
+            $result = Transaksi::with(["member","user","outlet","detail","detail.paket"])->get();
 
             return response([
                 "message" => "success get all transaksi",
