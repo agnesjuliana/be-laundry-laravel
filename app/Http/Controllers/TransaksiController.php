@@ -79,6 +79,7 @@ class TransaksiController extends Controller
             ];
 
             $transaksi = Transaksi::create($customPayload);
+            $customPayload['id_transaksi'] = $transaksi->id_transaksi;
 
             // prepare detail transaksi
             $listPaket = $request->list_paket;
@@ -116,12 +117,24 @@ class TransaksiController extends Controller
     {
         try {
 
-            $result = Transaksi::where("id_transaksi", $id)
+            $transaksi = Transaksi::where("id_transaksi", $id)
             ->with(["member","user","outlet","detail","detail.paket"])->first();
+
+
+            // prepare detail transaksi
+            $listPaket = $transaksi->detail;
+            for ($i = 0; $i < count($listPaket); $i++) {
+                $listPaket[$i]['id_transaksi'] = $transaksi->id_transaksi;
+
+                // find harga paket untuk dijumlah total
+                $paket = Paket::where("id_paket", $listPaket[$i]['id_paket'])->first();
+                $totalHargaPaket = $paket-> harga * $listPaket[$i]['qty'];
+                $transaksi['total'] += $totalHargaPaket;
+            }
 
             return response([
                 "message" => "success get one transaksi",
-                "data" => $result
+                "data" => $transaksi
             ], 200);
         } catch (\Exception $th) {
             return response([
