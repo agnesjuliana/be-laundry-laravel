@@ -24,6 +24,12 @@ Make database with same name as you write in the .env file. Now, you can run the
 php artisan migrate
 ```
 
+Now the magic begin
+
+```bash
+php artisan serve
+```
+
 ## API Reference
 Nah, just reference the API by postman (Cuz I'm too rushed to move the environtment)
 
